@@ -17,7 +17,7 @@ public class ConjuntoContas implements java.io.Serializable {
         return precisaAdicionar;
     }
     
-    public boolean deletar(long id) {
+    public boolean remover(long id) {
         boolean contido = verificarID(id);
         if (contido) {
             contas.remove(id);
