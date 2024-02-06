@@ -1,11 +1,15 @@
 package dao;
 
 import java.io.*;
-import model.ConjuntoContas;
+import model.*;
 
 public class DataAcess {
     // Atributos de classe
-    private final String path = "files\\colecaoContas.obj";
+    public static final int CODIGO_RENDIMENTO = 1;
+    public static final int CODIGO_APORTE = 2;
+    public static final int CODIGO_RETIRADA = 3;
+    
+    private static final String PATH = "files\\colecaoContas.obj";
     
     // Atributos de instância
     private ConjuntoContas colecaoContas;
@@ -18,20 +22,52 @@ public class DataAcess {
         }
     }
     
+    public boolean armazenarConta(long id, Conta conta) {
+        boolean result = colecaoContas.adicionar(id, conta);
+        atualizarArquivo();
+        return result;
+    }
+    
+    public boolean removerConta(long id) {
+        boolean result = colecaoContas.remover(id);
+        atualizarArquivo();
+        return result;
+    }
+    
+    public boolean atualizarConta(long id, int tipoMovimentacao, float dadoRelevante) {
+        boolean estadoArquivoEncontrado = false;
+        if (colecaoContas.verificarID(id)) {
+            estadoArquivoEncontrado = true;
+            switch (tipoMovimentacao) {
+                case 1 -> { // Rendimento
+                    colecaoContas.selecionarConta(id).rendimento(dadoRelevante);
+                }
+                case 2 -> { // Aporte 
+                    colecaoContas.selecionarConta(id).aporte(dadoRelevante);
+                }
+                case 3 -> { // Retirada
+                    colecaoContas.selecionarConta(id).retirada(dadoRelevante);
+                }
+            }
+        }
+        return estadoArquivoEncontrado;
+    }
+    
     private boolean arquivoExistir() {
         boolean existe = true;
         try {
-            FileInputStream in = new FileInputStream(path);
+            FileInputStream in = new FileInputStream(PATH);
+            in.close();
         } catch (FileNotFoundException fnfe) {
             existe = false;
-        }
+        } catch(IOException ioe) {}
         return existe;
     }
     
     private boolean lerColecaoDeObjetos() {
         boolean objLido = false;
         try {
-            colecaoContas = (ConjuntoContas) new ObjectInputStream(new FileInputStream(path)).readObject();
+            colecaoContas = (ConjuntoContas) new ObjectInputStream(new FileInputStream(PATH)).readObject();
             objLido = true;
         } catch (ClassNotFoundException | IOException fe) {}
         return objLido;
@@ -44,7 +80,7 @@ public class DataAcess {
     
     private void atualizarArquivo() {
         try {
-            new ObjectOutputStream(new FileOutputStream(path)).writeObject(colecaoContas);
+            new ObjectOutputStream(new FileOutputStream(PATH)).writeObject(colecaoContas);
         } 
         catch (FileNotFoundException fnfe) {} 
         catch (IOException io) {}
