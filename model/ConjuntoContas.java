@@ -25,7 +25,11 @@ public class ConjuntoContas implements java.io.Serializable {
         return contido;
     }
     
-    private boolean verificarID(long id) {
-        return contas.containsKey(id);
+    public Conta selecionarConta(long id) {
+        return contas.get(id);
+    }
+    
+    public boolean verificarID(long id) {
+        return contas.containsKey(id); // TRUE caso presente e FALSE caso não presente
     }
 }
