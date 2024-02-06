@@ -35,22 +35,22 @@ public class DataAcess {
     }
     
     public boolean atualizarConta(long id, int tipoMovimentacao, float dadoRelevante) {
-        boolean estadoArquivoEncontrado = false;
+        boolean estadoArquivoModificado = false;
         if (colecaoContas.verificarID(id)) {
-            estadoArquivoEncontrado = true;
+            estadoArquivoModificado = true;
             switch (tipoMovimentacao) {
                 case 1 -> { // Rendimento
-                    colecaoContas.selecionarConta(id).rendimento(dadoRelevante);
+                    estadoArquivoModificado = estadoArquivoModificado && colecaoContas.selecionarConta(id).rendimento(dadoRelevante);
                 }
                 case 2 -> { // Aporte 
-                    colecaoContas.selecionarConta(id).aporte(dadoRelevante);
+                    estadoArquivoModificado = estadoArquivoModificado && colecaoContas.selecionarConta(id).aporte(dadoRelevante);
                 }
                 case 3 -> { // Retirada
-                    colecaoContas.selecionarConta(id).retirada(dadoRelevante);
+                    estadoArquivoModificado = estadoArquivoModificado && colecaoContas.selecionarConta(id).retirada(dadoRelevante);
                 }
             }
         }
-        return estadoArquivoEncontrado;
+        return estadoArquivoModificado;
     }
     
     private boolean arquivoExistir() {
