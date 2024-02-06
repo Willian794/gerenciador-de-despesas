@@ -2,7 +2,7 @@ package model;
 
 import java.util.HashMap;
 
-public class ConjuntoContas {
+public class ConjuntoContas implements java.io.Serializable {
     private HashMap<Long, Conta> contas;
     
     public ConjuntoContas() {

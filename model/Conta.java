@@ -2,7 +2,7 @@ package model;
 
 import java.util.Calendar;
 
-public class Conta {
+public class Conta implements java.io.Serializable {
     // Atributo de classe
     private static long nContas = 0;
     
